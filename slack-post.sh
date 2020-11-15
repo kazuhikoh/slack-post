@@ -6,7 +6,7 @@ usage(){
   cat <<EOF
 Usage:
   $0 -h
-  $0 [-w WEBHOOK_ID] [-c CHANNEL] message
+  $0 [-w WEBHOOK_ID] message
 
 Description:
   Send a message to Slack by using Incoming Webhook.
@@ -23,9 +23,7 @@ Description:
 Options:
   -h help
   -w webhook-id
-  -c channel 
-  -j 
-     Send the message as payload json.
+  -j Send the message as payload json.
 EOF
 }
 
@@ -33,7 +31,6 @@ EOF
 
 option_asjson=''
 option_webhook_id=''
-option_channel=''
 
 # options
 while getopts hw:c:j opts
@@ -46,9 +43,6 @@ do
   w)
     option_webhook_id="$OPTARG"
     ;;
-  c)
-    readonly option_channel="$OPTARG"
-	;;
   j)
     option_asjson=yes
     ;;
@@ -78,7 +72,6 @@ readonly CONFIG="$HOME/.slack-post.config"
 readonly MESSAGE=$( [ -p /dev/stdin ] && cat - || echo "$1" )
 readonly MESSAGE_IS_JSON=${option_asjson}
 readonly WEBHOOK_ID=${option_webhook_id}
-readonly CHANNEL=${option_channel}
 
 # Webhook URL
 if [ -z "${WEBHOOK_ID}" ]; then
@@ -98,8 +91,6 @@ if [ "${MESSAGE_IS_JSON}" = yes ]; then
    payload="${MESSAGE}" 
 else
   payload='{'
-  # channel
-  [ ! -z $CHANNEL ] && payload="${payload}\"channel\": \"$CHANNEL\","
   # text
   payload="${payload}\"text\": \"$MESSAGE\""
   payload="${payload}}"
