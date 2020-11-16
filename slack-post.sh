@@ -91,9 +91,19 @@ if [ "${MESSAGE_IS_JSON}" = yes ]; then
    payload="${MESSAGE}" 
 else
   payload='{'
+
   # text
   payload="${payload}\"text\": \"$MESSAGE\""
+
   payload="${payload}}"
+
+  # Escaping text
+  # https://api.slack.com/reference/surfaces/formatting#escaping
+  # > Slack uses &, <, and > as control characters for special parsing in text objects
+  #payload=$(echo $payload | sed -e 's/&/&amp;/g')
+  #payload=$(echo $payload | sed -e 's/</&lt;;/g') 
+  #payload=$(echo $payload | sed -e 's/>/&gt;/g')
+  payload=$(echo $payload | sed -e 's/&/＆/g')
 fi
 
 # Send Message
