@@ -93,7 +93,7 @@ else
   payload='{'
 
   # text
-  msg=$(echo "$MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
+  msg=$(echo "$MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g' | sed -e 's/"/\\"/g')
   payload="${payload}\"text\": \"$msg\""
 
   payload="${payload}}"
