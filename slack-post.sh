@@ -105,6 +105,7 @@ else
   #payload=$(echo $payload | sed -e 's/</&lt;;/g') 
   #payload=$(echo $payload | sed -e 's/>/&gt;/g')
   payload=$(echo $payload | sed -e 's/&/＆/g')
+  payload=$(echo $payload | sed -e 's/\\/\\\\/g')
 fi
 
 # Send Message
